@@ -26,6 +26,7 @@ import 'header_footer_screen.dart';
 import 'table_extractor_screen.dart';
 import 'color_inverter_screen.dart';
 import 'booklet_imposition_screen.dart';
+import 'redaction_screen.dart';
 import 'settings_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
@@ -65,6 +66,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     TableExtractorScreen(),
     ColorInverterScreen(),
     BookletImpositionScreen(),
+    RedactionScreen(),
     SettingsScreen(),
   ];
 
@@ -252,10 +254,16 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                             icon: PhosphorIconsLight.bookOpen,
                             theme: theme,
                           ),
+                          _buildMenuItem(
+                            index: 25,
+                            title: 'Redact & Sanitize',
+                            icon: PhosphorIconsLight.shieldWarning,
+                            theme: theme,
+                          ),
                           const SizedBox(height: 16),
                           if (_isExpanded) _buildCategoryTitle('Preferences', theme),
                           _buildMenuItem(
-                            index: 25,
+                            index: 26,
                             title: 'Settings',
                             icon: PhosphorIconsLight.gearSix,
                             theme: theme,
