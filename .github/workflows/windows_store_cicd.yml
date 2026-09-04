@@ -39,6 +39,11 @@ jobs:
       - name: Run Flutter Tests
         run: flutter test
 
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v2.2.0
+        with:
+          cmake-version: '3.28.3'
+
       - name: Build Flutter Windows App
         run: flutter build windows --release
 
