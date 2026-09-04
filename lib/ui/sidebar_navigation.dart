@@ -25,6 +25,7 @@ import 'orientation_normalizer_screen.dart';
 import 'header_footer_screen.dart';
 import 'table_extractor_screen.dart';
 import 'color_inverter_screen.dart';
+import 'booklet_imposition_screen.dart';
 import 'settings_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
@@ -63,6 +64,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     HeaderFooterScreen(),
     TableExtractorScreen(),
     ColorInverterScreen(),
+    BookletImpositionScreen(),
     SettingsScreen(),
   ];
 
@@ -244,10 +246,16 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                             icon: PhosphorIconsLight.moon,
                             theme: theme,
                           ),
+                          _buildMenuItem(
+                            index: 24,
+                            title: 'Booklet & Imposition',
+                            icon: PhosphorIconsLight.bookOpen,
+                            theme: theme,
+                          ),
                           const SizedBox(height: 16),
                           if (_isExpanded) _buildCategoryTitle('Preferences', theme),
                           _buildMenuItem(
-                            index: 24,
+                            index: 25,
                             title: 'Settings',
                             icon: PhosphorIconsLight.gearSix,
                             theme: theme,

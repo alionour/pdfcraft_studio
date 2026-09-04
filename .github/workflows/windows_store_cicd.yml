@@ -85,7 +85,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         continue-on-error: true
         run: |
-          msstore reconfigure --tenantId ${{ secrets.MS_TENANT_ID }} --sellerId "${{ secrets.MSSTORE_SELLER_ID }}" --clientId ${{ secrets.MS_CLIENT_ID }} --clientSecret ${{ secrets.MS_CLIENT_SECRET }}
+          msstore reconfigure --tenantId ${{ secrets.MS_TENANT_ID }} --sellerId ${{ secrets.MSSTORE_SELLER_ID }} --clientId ${{ secrets.MS_CLIENT_ID }} --clientSecret ${{ secrets.MS_CLIENT_SECRET }}
 
       - name: Publish to Microsoft Store
         if: startsWith(github.ref, 'refs/tags/')
