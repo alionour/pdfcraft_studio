@@ -79,14 +79,18 @@ jobs:
       - name: Setup MSStore CLI
         if: startsWith(github.ref, 'refs/tags/')
         continue-on-error: true
-        uses: microsoft/microsoft-store-apppublisher@v1.4
-        with:
-          tenantId: ${{ secrets.MS_TENANT_ID }}
-          clientId: ${{ secrets.MS_CLIENT_ID }}
-          clientSecret: ${{ secrets.MS_CLIENT_SECRET }}
+        uses: microsoft/setup-msstore-cli@v1
+
+      - name: Authenticate with Microsoft Store
+        if: startsWith(github.ref, 'refs/tags/')
+        continue-on-error: true
+        run: |
+          msstore reconfigure --tenantId ${{ secrets.MS_TENANT_ID }} --sellerId "${{ secrets.MSSTORE_SELLER_ID }}" --clientId ${{ secrets.MS_CLIENT_ID }} --clientSecret ${{ secrets.MS_CLIENT_SECRET }}
 
       - name: Publish to Microsoft Store
         if: startsWith(github.ref, 'refs/tags/')
         continue-on-error: true
         run: |
-          msstore publish --app-id ${{ secrets.MS_STORE_APP_ID }}
+          $msixPath = Get-ChildItem -Path build/windows/x64/runner/Release/ -Filter *.msix | Select-Object -First 1 -ExpandProperty FullName
+          Write-Host "Publishing $msixPath to Microsoft Store App ID ${{ secrets.MS_STORE_APP_ID }}..."
+          msstore publish "$msixPath" --appId ${{ secrets.MS_STORE_APP_ID }} --verbose
