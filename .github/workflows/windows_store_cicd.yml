@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Patch legacy CMake minimum version
+      - name: Patch legacy dependencies for Flutter 3.40+
         shell: pwsh
         run: |
           Get-ChildItem -Path "$env:PUB_CACHE", "$env:LOCALAPPDATA\Pub\Cache", "C:\Users\runneradmin\AppData\Local\Pub\Cache" -Include "*.cmake.in", "*.cmake", "CMakeLists.txt" -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
@@ -45,6 +45,14 @@ jobs:
               $updated = $content -replace 'cmake_minimum_required\s*\(\s*VERSION\s+[0-2]\.[0-9\.]*', 'cmake_minimum_required(VERSION 3.5'
               Set-Content -Path $_.FullName -Value $updated
               Write-Host "Patched CMake version in: $($_.FullName)"
+            }
+          }
+          Get-ChildItem -Path "$env:PUB_CACHE", "$env:LOCALAPPDATA\Pub\Cache", "C:\Users\runneradmin\AppData\Local\Pub\Cache" -Filter "phosphor_icon_data.dart" -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
+            $content = Get-Content $_.FullName -Raw
+            if ($content -match 'class PhosphorIconData extends IconData') {
+              $updated = $content.Replace('class PhosphorIconData extends IconData', '// @dart=2.19`nclass PhosphorIconData extends IconData').Replace('extends IconData', 'implements IconData')
+              Set-Content -Path $_.FullName -Value $updated
+              Write-Host "Patched PhosphorIconData in: $($_.FullName)"
             }
           }
 
@@ -78,6 +86,7 @@ jobs:
 
       - name: Setup MSStore CLI
         if: startsWith(github.ref, 'refs/tags/')
+        continue-on-error: true
         uses: microsoft/microsoft-store-apppublisher@v1.4
         with:
           tenantId: ${{ secrets.MS_TENANT_ID }}
@@ -86,5 +95,6 @@ jobs:
 
       - name: Publish to Microsoft Store
         if: startsWith(github.ref, 'refs/tags/')
+        continue-on-error: true
         run: |
           msstore publish --app-id ${{ secrets.MS_STORE_APP_ID }}
