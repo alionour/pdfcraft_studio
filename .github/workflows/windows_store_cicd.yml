@@ -30,7 +30,7 @@ jobs:
       - name: Set up Flutter SDK
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.4'
+          channel: 'stable'
           architecture: x64
 
       - name: Install dependencies
