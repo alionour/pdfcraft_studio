@@ -24,6 +24,7 @@ import 'watermark_background_screen.dart';
 import 'orientation_normalizer_screen.dart';
 import 'header_footer_screen.dart';
 import 'table_extractor_screen.dart';
+import 'color_inverter_screen.dart';
 import 'settings_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
@@ -61,6 +62,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     OrientationNormalizerScreen(),
     HeaderFooterScreen(),
     TableExtractorScreen(),
+    ColorInverterScreen(),
     SettingsScreen(),
   ];
 
@@ -236,10 +238,16 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                             icon: PhosphorIconsLight.table,
                             theme: theme,
                           ),
+                          _buildMenuItem(
+                            index: 23,
+                            title: 'Night Mode Inverter',
+                            icon: PhosphorIconsLight.moon,
+                            theme: theme,
+                          ),
                           const SizedBox(height: 16),
                           if (_isExpanded) _buildCategoryTitle('Preferences', theme),
                           _buildMenuItem(
-                            index: 23,
+                            index: 24,
                             title: 'Settings',
                             icon: PhosphorIconsLight.gearSix,
                             theme: theme,
