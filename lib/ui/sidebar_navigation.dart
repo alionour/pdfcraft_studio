@@ -30,6 +30,7 @@ import 'redaction_screen.dart';
 import 'color_profiler_screen.dart';
 import 'repair_screen.dart';
 import 'bates_stamping_screen.dart';
+import 'attachment_manager_screen.dart';
 import 'settings_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
@@ -73,6 +74,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     ColorProfilerScreen(),
     RepairScreen(),
     BatesStampingScreen(),
+    AttachmentManagerScreen(),
     SettingsScreen(),
   ];
 
@@ -284,10 +286,16 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                             icon: PhosphorIconsLight.scales,
                             theme: theme,
                           ),
+                          _buildMenuItem(
+                            index: 29,
+                            title: 'Attachments & Portfolio',
+                            icon: PhosphorIconsLight.paperclip,
+                            theme: theme,
+                          ),
                           const SizedBox(height: 16),
                           if (_isExpanded) _buildCategoryTitle('Preferences', theme),
                           _buildMenuItem(
-                            index: 29,
+                            index: 30,
                             title: 'Settings',
                             icon: PhosphorIconsLight.gearSix,
                             theme: theme,
