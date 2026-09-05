@@ -2,7 +2,7 @@ name: flutter_app
 description: "PDFCraft Studio Desktop Application"
 publish_to: 'none'
 
-version: 1.2.1+12
+version: 1.2.2+13
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
@@ -23,6 +23,7 @@ dependencies:
   phosphor_flutter: ^2.1.0
   flex_color_scheme: 8.4.0
   google_fonts: 8.2.1
+  image: ^4.8.0
 
 dev_dependencies:
   flutter_test:
@@ -39,7 +40,7 @@ msix_config:
   publisher_display_name: على نورالدين السيد حسانين
   identity_name: A038805C.PDFCraftStudio
   publisher: CN=B8C022D6-3210-47E4-86DC-449784967308
-  msix_version: 1.2.1.0
+  msix_version: 1.2.2.0
   logo_path: assets/app_icon.png
   store: true
 
