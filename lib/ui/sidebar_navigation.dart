@@ -32,6 +32,7 @@ import 'repair_screen.dart';
 import 'bates_stamping_screen.dart';
 import 'attachment_manager_screen.dart';
 import 'page_label_screen.dart';
+import 'font_inspector_screen.dart';
 import 'settings_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
@@ -77,6 +78,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     BatesStampingScreen(),
     AttachmentManagerScreen(),
     PageLabelScreen(),
+    FontInspectorScreen(),
     SettingsScreen(),
   ];
 
@@ -300,10 +302,16 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                             icon: PhosphorIconsLight.listNumbers,
                             theme: theme,
                           ),
+                          _buildMenuItem(
+                            index: 31,
+                            title: 'Font & Typography Preflight',
+                            icon: PhosphorIconsLight.textT,
+                            theme: theme,
+                          ),
                           const SizedBox(height: 16),
                           if (_isExpanded) _buildCategoryTitle('Preferences', theme),
                           _buildMenuItem(
-                            index: 31,
+                            index: 32,
                             title: 'Settings',
                             icon: PhosphorIconsLight.gearSix,
                             theme: theme,
