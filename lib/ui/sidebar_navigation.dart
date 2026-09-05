@@ -29,6 +29,7 @@ import 'booklet_imposition_screen.dart';
 import 'redaction_screen.dart';
 import 'color_profiler_screen.dart';
 import 'repair_screen.dart';
+import 'bates_stamping_screen.dart';
 import 'settings_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
@@ -71,6 +72,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     RedactionScreen(),
     ColorProfilerScreen(),
     RepairScreen(),
+    BatesStampingScreen(),
     SettingsScreen(),
   ];
 
@@ -276,10 +278,16 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                             icon: PhosphorIconsLight.firstAid,
                             theme: theme,
                           ),
+                          _buildMenuItem(
+                            index: 28,
+                            title: 'Legal Bates Stamper',
+                            icon: PhosphorIconsLight.scales,
+                            theme: theme,
+                          ),
                           const SizedBox(height: 16),
                           if (_isExpanded) _buildCategoryTitle('Preferences', theme),
                           _buildMenuItem(
-                            index: 28,
+                            index: 29,
                             title: 'Settings',
                             icon: PhosphorIconsLight.gearSix,
                             theme: theme,
