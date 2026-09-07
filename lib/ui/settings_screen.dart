@@ -192,7 +192,7 @@ class SettingsScreen extends StatelessWidget {
                     iconColor: theme.colorScheme.error,
                     title: 'PDFCraft Studio',
                     trailing: Text(
-                      'v1.0.0',
+                      'v1.2.8',
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
