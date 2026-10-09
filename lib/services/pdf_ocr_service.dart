@@ -72,24 +72,13 @@ class PdfOcrService {
     final extractedLines = _parsePdfTextFromBytes(bytes);
 
     if (extractedLines.isNotEmpty) {
-      final linesPerPage = (extractedLines.length / totalPages).ceil();
-      for (var pageNum = 1; pageNum <= totalPages; pageNum++) {
-        final start = (pageNum - 1) * linesPerPage;
-        final end = (start + linesPerPage > extractedLines.length)
-            ? extractedLines.length
-            : start + linesPerPage;
-
-        final pageContent = (start < extractedLines.length)
-            ? extractedLines.sublist(start, end).join('\n')
-            : 'No selectable text detected on this page.';
-
-        final pageBuf = StringBuffer();
-        pageBuf.writeln('--- Page $pageNum ---');
-        pageBuf.writeln(pageContent);
-        pageTexts.add(pageBuf.toString());
-
-        if (onProgress != null) onProgress(pageNum, totalPages);
-      }
+      // The stream scan cannot tell which page a line belongs to, so return
+      // one block instead of guessing page boundaries.
+      final pageBuf = StringBuffer();
+      pageBuf.writeln('--- Extracted text (page boundaries not detected) ---');
+      pageBuf.writeln(extractedLines.join('\n'));
+      pageTexts.add(pageBuf.toString());
+      if (onProgress != null) onProgress(totalPages, totalPages);
     } else {
       for (var pageNum = 1; pageNum <= totalPages; pageNum++) {
         final pageBuf = StringBuffer();

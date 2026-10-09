@@ -75,12 +75,14 @@ class PdfMetadataService {
     final baseName = p.basenameWithoutExtension(pdfPath);
 
     return PdfMetadataInfo(
+      // The document's Info dictionary is not parsed yet, so leave fields
+      // empty rather than showing invented values as if they were read.
       title: baseName,
-      author: 'PDFCraft Studio',
-      subject: 'PDF Document',
-      keywords: 'pdf, document, export',
-      creator: 'PDFCraft Studio v1.0.1',
-      producer: 'PDFCraft Engine',
+      author: '',
+      subject: '',
+      keywords: '',
+      creator: '',
+      producer: '',
       totalPages: pagesCount,
       pageSizeInfo: pageDimText,
       filePath: pdfPath,

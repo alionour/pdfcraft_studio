@@ -31,7 +31,7 @@ class _SecurityScreenState extends State<SecurityScreen>
   final double _rotationAngle = 45.0;
 
   // Encryption Password State
-  bool _enableEncryption = false;
+  final bool _enableEncryption = false;
   final TextEditingController _userPasswordController = TextEditingController();
   final TextEditingController _ownerPasswordController = TextEditingController();
 
@@ -401,9 +401,12 @@ class _SecurityScreenState extends State<SecurityScreen>
             icon: PhosphorIconsLight.lockKey,
             iconColor: theme.colorScheme.primary,
             title: 'Password Protection',
-            trailing: Switch(
-              value: _enableEncryption,
-              onChanged: (val) => setState(() => _enableEncryption = val),
+            // Disabled until real AES encryption lands: the current
+            // encryptor writes an /Encrypt dictionary but leaves content
+            // unencrypted, which produces unreadable files.
+            trailing: const Switch(
+              value: false,
+              onChanged: null,
             ),
             child: _enableEncryption
                 ? Column(
@@ -430,7 +433,8 @@ class _SecurityScreenState extends State<SecurityScreen>
                     ],
                   )
                 : Text(
-                    'Enable to password-protect the output PDF',
+                    'Password protection is coming in a future update. '
+                    'Files saved here are not encrypted.',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),

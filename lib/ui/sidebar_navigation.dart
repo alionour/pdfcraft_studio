@@ -15,25 +15,21 @@ import 'flatten_screen.dart';
 import 'bookmark_screen.dart';
 import 'accessibility_screen.dart';
 import 'crop_screen.dart';
-import 'compare_screen.dart';
-import 'form_data_screen.dart';
 import 'splitter_screen.dart';
 import 'reorder_screen.dart';
 import 'merge_screen.dart';
 import 'watermark_background_screen.dart';
 import 'orientation_normalizer_screen.dart';
 import 'header_footer_screen.dart';
-import 'table_extractor_screen.dart';
 import 'color_inverter_screen.dart';
 import 'booklet_imposition_screen.dart';
-import 'redaction_screen.dart';
 import 'color_profiler_screen.dart';
 import 'repair_screen.dart';
-import 'bates_stamping_screen.dart';
 import 'attachment_manager_screen.dart';
 import 'page_label_screen.dart';
 import 'font_inspector_screen.dart';
 import 'settings_screen.dart';
+import 'coming_soon_screen.dart';
 
 class SidebarNavigation extends StatefulWidget {
   const SidebarNavigation({super.key});
@@ -45,6 +41,10 @@ class SidebarNavigation extends StatefulWidget {
 class _SidebarNavigationState extends State<SidebarNavigation> {
   int _selectedIndex = 0;
   bool _isExpanded = true;
+
+  /// Tools that are turned off until their processing engine is real:
+  /// Compare, Form Data, Table Extractor, Redaction and Bates.
+  static const Set<int> _comingSoonIndices = {14, 15, 22, 25, 28};
 
   final List<Widget> _pages = const [
     HomeScreen(),
@@ -61,21 +61,38 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
     BookmarkScreen(),
     AccessibilityScreen(),
     CropScreen(),
-    CompareScreen(),
-    FormDataScreen(),
+    ComingSoonScreen(
+      title: 'Compare & Visual Diff',
+      description: 'Compare two PDFs page by page and highlight what changed.',
+    ),
+    ComingSoonScreen(
+      title: 'Form Data Exporter',
+      description: 'Export the values of fillable form fields to CSV or JSON.',
+    ),
     SplitterScreen(),
     ReorderScreen(),
     MergeScreen(),
     WatermarkBackgroundScreen(),
     OrientationNormalizerScreen(),
     HeaderFooterScreen(),
-    TableExtractorScreen(),
+    ComingSoonScreen(
+      title: 'Table Extractor & CSV',
+      description: 'Detect tables on PDF pages and export them to CSV or JSON.',
+    ),
     ColorInverterScreen(),
     BookletImpositionScreen(),
-    RedactionScreen(),
+    ComingSoonScreen(
+      title: 'Redact & Sanitize',
+      description:
+          'Permanently remove sensitive text and images from a PDF, not just cover them.',
+    ),
     ColorProfilerScreen(),
     RepairScreen(),
-    BatesStampingScreen(),
+    ComingSoonScreen(
+      title: 'Legal Bates Stamper',
+      description:
+          'Stamp sequential Bates numbers on every page and export an audit log.',
+    ),
     AttachmentManagerScreen(),
     PageLabelScreen(),
     FontInspectorScreen(),
@@ -142,7 +159,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                           ),
                           _buildMenuItem(
                             index: 4,
-                            title: 'OCR & Text Extract',
+                            title: 'Text Extract',
                             icon: PhosphorIconsLight.textAa,
                             theme: theme,
                           ),
@@ -407,7 +424,7 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
             ),
             BottomNavigationBarItem(
               icon: Icon(PhosphorIconsLight.textAa),
-              label: 'OCR',
+              label: 'Text',
             ),
             BottomNavigationBarItem(
               icon: Icon(PhosphorIconsLight.hash),
@@ -575,12 +592,13 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
   }) {
     final isSelected = _selectedIndex == index;
     final isHovered = _hoverStates[index] ?? false;
+    final isComingSoon = _comingSoonIndices.contains(index);
 
     if (!_isExpanded) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Tooltip(
-          message: title,
+          message: isComingSoon ? '$title (coming soon)' : title,
           preferBelow: false,
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
@@ -679,10 +697,31 @@ class _SidebarNavigationState extends State<SidebarNavigation> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  if (isComingSoon) _buildSoonBadge(theme),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSoonBadge(ThemeData theme) {
+    return Container(
+      margin: const EdgeInsets.only(left: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        'SOON',
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+          fontWeight: FontWeight.bold,
+          fontSize: 9,
+          letterSpacing: 0.5,
         ),
       ),
     );

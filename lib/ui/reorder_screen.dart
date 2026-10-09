@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as p;
+import 'package:pdfx/pdfx.dart' as pdfx;
 import '../services/pdf_page_reorder_service.dart';
 
 class ReorderScreen extends StatefulWidget {
@@ -27,15 +28,28 @@ class _ReorderScreenState extends State<ReorderScreen> {
 
     if (result != null && result.files.single.path != null) {
       final path = result.files.single.path!;
-      setState(() {
-        _selectedPdfPath = path;
-        // Sample 5 pages initialized
-        _pageItems = List.generate(
-          5,
-          (index) => PageOrderItem(originalPageIndex: index + 1),
-        );
-        _statusMessage = 'Loaded 5 pages for reordering and rotation.';
-      });
+      try {
+        final doc = await pdfx.PdfDocument.openFile(path);
+        final pageCount = doc.pagesCount;
+        await doc.close();
+        if (!mounted) return;
+        setState(() {
+          _selectedPdfPath = path;
+          _pageItems = List.generate(
+            pageCount,
+            (index) => PageOrderItem(originalPageIndex: index + 1),
+          );
+          _statusMessage =
+              'Loaded $pageCount page(s) for reordering and rotation.';
+        });
+      } catch (e) {
+        if (!mounted) return;
+        setState(() {
+          _selectedPdfPath = null;
+          _pageItems = [];
+          _statusMessage = 'Could not open PDF: $e';
+        });
+      }
     }
   }
 
