@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDFCraft Studio Waitlist</title>
+<meta name="description" content="Join the PDFCraft Studio waitlist and vote for the PDF tools you want built next.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow column; hero, then a numbered ballot of tools stamped like Bates numbers, then the sign-up form. */
+:root {
+  --paper: #f5f7fa;
+  --sheet: #ffffff;
+  --ink: #141b2b;
+  --ink-soft: #4a5468;
+  --rule: #d9dee8;
+  --mark: #ffe14d;
+  --mark-ink: #141b2b;
+  --accent: #2847d6;
+  --ok: #17803d;
+  --err: #b42318;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f141f; --sheet: #171e2c; --ink: #e8ecf4; --ink-soft: #a3adc2;
+    --rule: #2b3447; --mark: #e8c93a; --mark-ink: #141b2b; --accent: #8ea2ff;
+    --ok: #5fd08a; --err: #ff8a7d; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f141f; --sheet: #171e2c; --ink: #e8ecf4; --ink-soft: #a3adc2;
+  --rule: #2b3447; --mark: #e8c93a; --mark-ink: #141b2b; --accent: #8ea2ff;
+  --ok: #5fd08a; --err: #ff8a7d; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.6 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 40px 64px; display: grid; gap: 48px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 600 15px/1 var(--body); color: var(--ink-soft); }
+.brand svg { flex: none; }
+h1 { font: 800 clamp(2.1rem, 6vw, 3.4rem)/1.05 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+h1 mark { background: linear-gradient(transparent 12%, var(--mark) 12%, var(--mark) 88%, transparent 88%); color: var(--mark-ink); padding-inline: 0.08em; }
+.lede { font-size: 1.125rem; color: var(--ink-soft); max-width: 60ch; margin: 0; }
+.hero { display: grid; gap: 20px; }
+h2 { font: 600 1.5rem/1.2 var(--display); margin: 0; text-wrap: balance; }
+.section-head { display: grid; gap: 6px; }
+.hint { color: var(--ink-soft); margin: 0; }
+.counter { font: 500 13px/1 var(--mono); letter-spacing: 0.04em; color: var(--ink-soft); }
+.counter b { color: var(--ink); }
+.ballot { display: grid; gap: 0; border-top: 1px solid var(--rule); margin: 0; padding: 0; }
+.ballot fieldset, fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.tool { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 16px; align-items: start; padding-block: 16px; border-bottom: 1px solid var(--rule); cursor: pointer; }
+.tool input { position: absolute; opacity: 0; pointer-events: none; }
+.tool .bates { font: 500 12px/1.9 var(--mono); color: var(--ink-soft); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.tool .name { font-weight: 600; justify-self: start; }
+.tool .what { grid-column: 2; color: var(--ink-soft); font-size: 0.95rem; min-width: 0; }
+.tool .box { grid-row: 1 / span 2; grid-column: 3; width: 28px; height: 28px; border: 2px solid var(--rule); border-radius: 6px; display: grid; place-items: center; transition: background .15s, border-color .15s; }
+.tool .box svg { opacity: 0; }
+.tool:hover .box { border-color: var(--ink-soft); }
+.tool input:checked ~ .box { background: var(--ink); border-color: var(--ink); }
+.tool input:checked ~ .box svg { opacity: 1; }
+.tool input:checked ~ .name { background: var(--mark); color: var(--mark-ink); box-shadow: 0.2em 0 0 var(--mark), -0.2em 0 0 var(--mark); }
+.tool input:focus-visible ~ .box { outline: 3px solid var(--accent); outline-offset: 2px; }
+.tool.locked { cursor: not-allowed; opacity: 0.5; }
+.form { background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; padding: 24px; display: grid; gap: 18px; }
+.field { display: grid; gap: 6px; }
+label.lbl { font-weight: 600; font-size: 0.95rem; }
+.opt { font-weight: 400; color: var(--ink-soft); }
+input[type="email"], select, textarea { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; width: 100%; }
+textarea { min-height: 84px; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+button { font: 600 1rem/1 var(--body); background: var(--ink); color: var(--paper); border: 0; border-radius: 8px; padding: 14px 20px; cursor: pointer; justify-self: start; }
+button:disabled { opacity: 0.6; cursor: progress; }
+.status { margin: 0; font-weight: 500; }
+.status.ok { color: var(--ok); }
+.status.err { color: var(--err); }
+.trap { position: absolute; left: -9999px; }
+.done { display: grid; gap: 10px; }
+.fine { font-size: 0.875rem; color: var(--ink-soft); margin: 0; }
+footer { font-size: 0.875rem; color: var(--ink-soft); border-top: 1px solid var(--rule); padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <header class="hero">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="2" width="18" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="8" y="9" width="10" height="3" fill="currentColor"/><rect x="8" y="15" width="7" height="3" fill="currentColor"/></svg>
+      PDFCraft Studio for Windows
+    </div>
+    <h1>Which PDF tools should we <mark>build next?</mark></h1>
+    <p class="lede">We are rebuilding PDFCraft Studio's PDF engine so every tool keeps your text, links and bookmarks intact. Before we build the next tools, we want to know which ones you would actually use. Pick up to three and join the waitlist. We'll email you when they ship.</p>
+  </header>
+
+  <form id="waitlist" novalidate>
+    <section class="section-head" aria-labelledby="pick-h">
+      <h2 id="pick-h">Pick up to three tools</h2>
+      <p class="counter" id="counter" aria-live="polite"><b>0</b> of 3 picked</p>
+    </section>
+    <fieldset>
+      <legend class="trap">Tools you want</legend>
+      <div class="ballot" id="ballot"></div>
+    </fieldset>
+
+    <div style="height:32px"></div>
+
+    <section class="form" aria-labelledby="join-h" id="join">
+      <h2 id="join-h">Join the waitlist</h2>
+      <div class="field">
+        <label class="lbl" for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="lbl" for="role">What do you mostly use PDFs for?</label>
+          <select id="role" name="role">
+            <option value="">Choose one</option>
+            <option>Legal work</option>
+            <option>Office and admin</option>
+            <option>Accounting and finance</option>
+            <option>Study and research</option>
+            <option>Publishing and design</option>
+            <option>Personal documents</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl" for="pay">Would you pay for these tools?</label>
+          <select id="pay" name="would_pay">
+            <option value="">Choose one</option>
+            <option>Yes, a one-time purchase</option>
+            <option>Yes, a small subscription</option>
+            <option>Only if it's free</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="note">Anything we're missing? <span class="opt">(optional)</span></label>
+        <textarea id="note" name="note" placeholder="A tool you need, or the file that keeps breaking your current app"></textarea>
+      </div>
+      <input class="trap" type="text" id="website" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" id="submit">Join the waitlist</button>
+      <p class="status" id="status" role="status"></p>
+      <p class="fine">We only use your email to tell you when these tools are ready. No spam, and you can ask us to delete it any time.</p>
+    </section>
+  </form>
+
+  <footer>PDFCraft Studio is a desktop PDF toolkit on the Microsoft Store. Votes on this page decide what we build after the engine rebuild.</footer>
+</main>
+
+<script>
+// Set this to your Formspree endpoint (https://formspree.io/f/xxxxxxxx) to collect sign-ups.
+// Left empty, the page runs as a preview and sends nothing.
+const FORM_ENDPOINT = "";
+const MAX_PICKS = 3;
+
+const TOOLS = [
+  ["redaction", "True redaction", "Black out text and images so they are permanently removed from the file, not just covered."],
+  ["ocr", "OCR for scanned PDFs", "Turn scans and photos into searchable, copyable text, page by page."],
+  ["lossless", "Lossless merge, split and compress", "Combine, split, rotate and shrink files while keeping text selectable and links working."],
+  ["encryption", "Real password protection", "AES-256 encryption that other PDF readers respect."],
+  ["batch", "Batch processing", "Run any tool over a whole folder with a progress queue."],
+  ["tables", "Tables to Excel", "Pull tables out of PDFs into Excel or CSV with the columns intact."],
+  ["signatures", "Digital signatures", "Sign PDFs and check other people's signatures."],
+  ["bates", "Bates numbering", "Stamp sequential legal numbers on every page across a set of files."],
+  ["compare", "Compare two PDFs", "See what changed between two versions, both text and layout."],
+  ["forms", "Form data export", "Read the values filled into PDF forms and export them."],
+  ["pdfa", "PDF/A for archiving", "Convert documents to the long-term archive standard."],
+  ["arabic", "Arabic interface", "The full app in Arabic, right to left."],
+  ["search", "Tool search and saved settings", "Find tools fast, pin favorites, and keep your options between sessions."]
+];
+
+const ballot = document.getElementById("ballot");
+const counter = document.getElementById("counter");
+const form = document.getElementById("waitlist");
+const statusEl = document.getElementById("status");
+const submitBtn = document.getElementById("submit");
+
+TOOLS.forEach(([id, name, what], i) => {
+  const label = document.createElement("label");
+  label.className = "tool";
+  label.htmlFor = "t-" + id;
+  label.innerHTML =
+    '<span class="bates">PDFC-' + String(i + 1).padStart(4, "0") + '</span>' +
+    '<input type="checkbox" name="features" value="' + id + '" id="t-' + id + '">' +
+    '<span class="name"></span>' +
+    '<span class="box" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="var(--paper)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
+    '<span class="what"></span>';
+  label.querySelector(".name").textContent = name;
+  label.querySelector(".what").textContent = what;
+  ballot.appendChild(label);
+});
+
+function picked() {
+  return Array.from(ballot.querySelectorAll("input:checked")).map((el) => el.value);
+}
+
+function refresh() {
+  const n = picked().length;
+  counter.innerHTML = "<b>" + n + "</b> of " + MAX_PICKS + " picked";
+  ballot.querySelectorAll(".tool").forEach((row) => {
+    const box = row.querySelector("input");
+    const lock = n >= MAX_PICKS && !box.checked;
+    box.disabled = lock;
+    row.classList.toggle("locked", lock);
+  });
+}
+ballot.addEventListener("change", refresh);
+
+function say(text, kind) {
+  statusEl.textContent = text;
+  statusEl.className = "status" + (kind ? " " + kind : "");
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const features = picked();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say("Enter a valid email address so we can tell you when tools ship.", "err"); document.getElementById("email").focus(); return; }
+  if (features.length === 0) { say("Pick at least one tool above so we know what to build.", "err"); return; }
+  if (document.getElementById("website").value) return;
+
+  const payload = {
+    email,
+    features: features.join(", "),
+    role: document.getElementById("role").value,
+    would_pay: document.getElementById("pay").value,
+    note: document.getElementById("note").value.trim(),
+    source: "waitlist-page"
+  };
+  features.forEach((f) => { payload["vote_" + f] = 1; });
+
+  if (!FORM_ENDPOINT) {
+    say("Preview only: this copy of the page doesn't send sign-ups yet.", "ok");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  say("Sending…");
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    document.getElementById("join").innerHTML =
+      '<div class="done"><h2>You\'re on the list</h2><p class="hint">Thanks. We\'ll email ' +
+      email.replace(/[<>&"]/g, "") + ' when the tools you picked are ready.</p></div>';
+    ballot.querySelectorAll("input").forEach((el) => { el.disabled = true; });
+  } catch (err) {
+    submitBtn.disabled = false;
+    say("We couldn't send that. Check your connection and try again.", "err");
+  }
+});
+
+refresh();
+</script>
+</body>
+</html>
