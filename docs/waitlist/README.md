@@ -11,7 +11,7 @@ app depends on it.
 2. Paste it into `FORM_ENDPOINT` near the top of the `<script>` in `index.html`.
    While it is empty the page is a preview and sends nothing.
 3. In the repo's **Settings → Pages**, publish from the `main` branch, `/docs`
-   folder. The page is then at `https://<user>.github.io/pdfcraft_studio/waitlist/`.
+   folder. The page is then at `https://alionour.github.io/pdfcraft_studio/` (the site root redirects to `waitlist/`).
 4. Link to it from the Store listing and from the app's "Coming soon" badges.
 
 ## Reading the results
