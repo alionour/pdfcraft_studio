@@ -96,62 +96,13 @@ class _OcrScreenState extends State<OcrScreen> {
     }
   }
 
-  Future<void> _exportSearchablePdf() async {
-    if (_selectedPdfPath == null || _ocrResult == null) return;
-
-    var output = await FilePicker.saveFile(
-      dialogTitle: 'Save Searchable PDF',
-      fileName: 'searchable_${p.basename(_selectedPdfPath!)}',
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
-    );
-
-    if (output != null) {
-      if (!output.toLowerCase().endsWith('.pdf')) {
-        output = '$output.pdf';
-      }
-      setState(() {
-        _isProcessing = true;
-        _progress = 0.0;
-        _statusMessage = 'Building searchable PDF with embedded text layer...';
-        _isSuccess = false;
-      });
-
-      try {
-        await PdfOcrService.createSearchablePdf(
-          inputPdfPath: _selectedPdfPath!,
-          outputPdfPath: output,
-          pageTexts: _ocrResult!.pageTexts,
-          onProgress: (cur, tot) {
-            setState(() {
-              _progress = cur / tot;
-              _statusMessage = 'Embedding text into page $cur of $tot...';
-            });
-          },
-        );
-
-        setState(() {
-          _isProcessing = false;
-          _isSuccess = true;
-          _statusMessage = 'Searchable PDF created: $output';
-        });
-      } catch (e) {
-        setState(() {
-          _isProcessing = false;
-          _isSuccess = false;
-          _statusMessage = 'Failed to create searchable PDF: $e';
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: DashboardStyleAppBar(
-        title: const Text('OCR & Text Extraction'),
+        title: const Text('Text Extraction'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -244,7 +195,7 @@ class _OcrScreenState extends State<OcrScreen> {
                   ? DashboardCard(
                       icon: PhosphorIconsLight.fileText,
                       iconColor: theme.colorScheme.tertiary,
-                      title: 'Extracted Text (${_ocrResult!.pageTexts.length} pages)',
+                      title: 'Extracted Text',
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -258,12 +209,6 @@ class _OcrScreenState extends State<OcrScreen> {
                             onPressed: () => _exportAsText('md'),
                             icon: const Icon(PhosphorIconsLight.fileMd, size: 14),
                             label: const Text('MD'),
-                          ),
-                          const SizedBox(width: 8),
-                          FilledButton.icon(
-                            onPressed: _exportSearchablePdf,
-                            icon: const Icon(PhosphorIconsLight.magnifyingGlass, size: 14),
-                            label: const Text('Searchable PDF'),
                           ),
                         ],
                       ),
